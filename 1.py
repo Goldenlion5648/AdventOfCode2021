@@ -10,10 +10,10 @@ x = nums(inp)
 for i in range(len(x) - 1):
     if x[i+1] > x[i]:
         t += 1
-ans(t, False)
+ans(t)
 
 z = 0
-prev = 0
+prev = sum(x[:3])
 for i in range(1, len(x)):
     if sum(x[i:i+3]) > prev:
         z += 1
