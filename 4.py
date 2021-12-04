@@ -11,37 +11,27 @@ def scan(z, said):
     for y in range(5):
         if all(x in said for x in z[y]):
             return True
-    # for y in range(5):
-        # if all(x in said for x in z[y]):
-    print(z)
     for j in range(5):
         if all(z[i][j] in said for i in range(5)):
             return True
     return False
-boards = a.data.split("\n\n")
-boards = [x.split("\n") for x in boards]
-print(boards)
-for j in range(len(boards)):
-    boards[j] = [nums(y) for y in boards[j]]
-print(boards)
-# exit()
-# for i, board in enu(boards):
-#     boards[i] = board.split("\n")
-#     boards[i] = [nums(x) for x in board]
-    # print(board)
-print(boards)
+
+
+boards = list(chunked(list(chunked(nums(a.data), 5)), 5))
+
 said = set()
 marked = set()
+p1 = 0
 for n in nums(b):
-    print(n)
+    # print(n)
     said.add(n)
     for w, board in enu(boards):
         if scan(board, said):
+            if len(marked) == 0:
+                ans(sum(set(flatten(board)) - said) * n)
             marked.add(w)
         temp = len(boards) - len(marked) 
         if temp == 0:
             temp = sum(set(flatten(board)) - said)
             ans(temp * n, True)
-
-
 
