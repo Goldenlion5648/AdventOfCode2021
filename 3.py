@@ -15,6 +15,7 @@ for i in range(len(a.lines[0])):
 w = int(string(w.values()), 2)
 z = int(string(z.values()), 2)
 # z = int(z.values(), 2)
+# print(w, z)
 ans(w * z)
 
 # for line in a.lines:
@@ -28,6 +29,7 @@ for i in range(len(a.lines[0])):
         break
 
 q = int(li[0], 2)
+
 li = a.lines
 for i in range(len(a.lines[0])):
     c = [line[i] for line in li]
