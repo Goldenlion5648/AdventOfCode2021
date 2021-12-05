@@ -41,5 +41,6 @@ for i in range(len(a.lines[0])):
         break
 
 z = int(li[0], 2)
+print(q, z)
     # w[i] = (x[0] for x in Counter(line[i] for line in a.lines).most_common(1))
 ans(q * z)
