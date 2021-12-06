@@ -10,8 +10,8 @@ def solve(p2=False):
     lap = dd(int)
     for (x1, y1, x2, y2) in d:
         if p2 and abs(y1 - y2) == abs(x1 - x2):
-            x_range = range(x1, x2 + 1) if x1 < x2 else range(x1, x2-1, -1)
-            y_range = range(y1, y2 + 1) if y1 < y2 else range(y1, y2-1, -1)
+            x_range = irange(x1, x2)
+            y_range = irange(y1, y2)
             for x, y in zip(x_range, y_range):
                 lap[x, y] += 1
 
