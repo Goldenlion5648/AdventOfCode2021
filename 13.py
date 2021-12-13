@@ -28,14 +28,19 @@ def draw2(board):
             print(board[x, y], end='')
         print()
 board = dd(lambda :".")
+done_first = False
 for line in a.lines:
     if "fold" in line:
+
         print("folding")
-        size = max(max(board.keys(), key=lambda x: max(x)))
+        size = max(max(board.keys(), key=lambda x: max(x))) + 5
         if "x" in line:
             foldX(board, num(line))
         if "y" in line:
             foldY(board, num(line))
+        if not done_first:
+            done_first = True
+            ans(sum(c == "#" for c in board.values()))
     elif line:
         x, y = nums(line)
         board[x, y] = "#"
