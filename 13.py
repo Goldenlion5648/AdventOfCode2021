@@ -23,7 +23,7 @@ def foldY(board, foldy):
                 board[x, y] = '.'
 
 def draw2(board):
-    for y in range(20):
+    for y in range(15):
         for x in range(50):
             print(board[x, y], end='')
         print()

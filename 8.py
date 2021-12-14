@@ -34,8 +34,8 @@ for line in a.lines:
     for o in out:
         if len(o) in unique_lens:
             p1 += 1
-    for p in pat:
-        key[tsorted(p)] |= ( len_to_dig[len(p)])
+    for two_letters in pat:
+        key[tsorted(two_letters)] |= ( len_to_dig[len(two_letters)])
     # printd(key)
     f = {
         1: [x for x in key if len(x) == 2][0],
