@@ -7,21 +7,21 @@ real_inp = a.data
 
 converts = {
     "0" : "0000",
-"1" : "0001",
-"2" : "0010",
-"3" : "0011",
-"4" : "0100",
-"5" : "0101",
-"6" : "0110",
-"7" : "0111",
-"8" : "1000",
-"9" : "1001",
-"A" : "1010",
-"B" : "1011",
-"C" : "1100",
-"D" : "1101",
-"E" : "1110",
-"F" : "1111"
+    "1" : "0001",
+    "2" : "0010",
+    "3" : "0011",
+    "4" : "0100",
+    "5" : "0101",
+    "6" : "0110",
+    "7" : "0111",
+    "8" : "1000",
+    "9" : "1001",
+    "A" : "1010",
+    "B" : "1011",
+    "C" : "1100",
+    "D" : "1101",
+    "E" : "1110",
+    "F" : "1111"
 }
 
 class Packet:
@@ -61,15 +61,10 @@ class Packet:
             self.total_children_length = length_in_bits
             
             remaining = self.inp[22:22+length_in_bits]
-            # used = 0 
-            times_run = 0
             while remaining:
                 temp = Packet(remaining, True)
                 self.children.append(temp)
-                # used += len(remaining) - len(temp.extra)
                 remaining = temp.extra
-                times_run += 1
-                # pritn(f"{times_run=}")
 
             all_packets.extend(self.children)
             self.extra = self.inp[22+length_in_bits:]
@@ -122,7 +117,6 @@ class Packet:
         literal_val = self.inp[6:]
         groups4 = list(chunked((literal_val), 5))
         groups4 = list(split_after(groups4, lambda x: x[0] == '0'))[0]
-        # groups4 = [x[0] for x in groups4]
         len_used = sum(len(x) for x in groups4)
         z = ["".join(x[1:]) for x in groups4]
         val = "".join(z)
