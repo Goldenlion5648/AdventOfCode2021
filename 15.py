@@ -35,31 +35,27 @@ def get_board(inp, p2=False):
 
     return board
 
-def search(board):
-    goal = list(board.keys())[-1]
-    print(goal)
-    x = 0 
-    y = 0
-    fringe = ([(0, (y, x))])
-    heapq.heapify(fringe)
-    seen = {(y, x)}
-    seen  =dd(lambda : inf)
-    while fringe:
-        steps, (y, x) = heapq.heappop(fringe)
-        if seen[y, x] <= steps:
-            continue
-        seen[y, x] = min(seen[y, x], steps)
-        if (y, x) == goal:
-            print("stopped")
-            ans(steps)
-            break
-        for dy, dx in adj:
-            n = (dy+y, dx +x)
-            if n in board:
-                heapq.heappush(fringe, (board[n] + steps, n))
+# def dijkstra(board, startY, startX, goalY, goalX):
+#     goal = (goalY, goalX)
+#     # print(goal)
+#     fringe = ([(0, (startY, startX))])
+#     heapq.heapify(fringe)
+#     seen  =dd(lambda : inf)
+#     while fringe:
+#         steps, (y, x) = heapq.heappop(fringe)
+#         if seen[y, x] <= steps:
+#             continue
+#         seen[y, x] = min(seen[y, x], steps)
+#         if (y, x) == goal:
+#             # print("stopped")
+#             return (steps)
+#         for dy, dx in adj:
+#             n = (dy+y, dx +x)
+#             if n in board:
+#                 heapq.heappush(fringe, (board[n] + steps, n))
 
     # ans(seen[goal])
 board = get_board(inp)
-search(board)
+ans(dijkstra(board, 0,0,*list(board.keys())[-1]))
 board = get_board(tile_input(inp), True)
-search(board)
+ans(dijkstra(board, 0,0,*list(board.keys())[-1]))
