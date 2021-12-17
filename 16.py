@@ -74,13 +74,10 @@ class Packet:
             data = self.inp[7:7+11]
             contains = int(data, 2)
             cur = self.inp[18:]
-            self.num_children = contains
-            used = 0
             for _ in range(contains):
                 temp = Packet(cur, True)
                 self.children.append(temp)
                 cur = temp.extra
-                used += len(cur)
             all_packets.extend(self.children)
             self.extra = cur
         else:
@@ -136,11 +133,14 @@ assert (sum(x.version for x in all_packets)) == 23
 all_packets.clear()
 all_packets.append(Packet("A0016C880162017C3686B18A3D4780"))
 assert (sum(x.version for x in all_packets)) == 31
+printe(all_packets)
 all_packets.clear()
 
 all_packets.append(Packet(a.data))
 ans(sum(x.version for x in all_packets))
 all_packets.clear()
+
+assert Packet("D2FE28").value == 2021
 
 assert Packet("C200B40A82").value == 3
 assert Packet("04005AC33890").value == 54
@@ -148,7 +148,8 @@ assert Packet("880086C3E88112").value == 7
 assert Packet("CE00C43D881120").value == 9
 assert Packet("D8005AC2A8F0").value == 1
 assert Packet("F600BC2D8F").value == 0
-assert Packet("D2FE28").value == 2021
 assert Packet("9C0141080250320F1802104A08").value == 1
+
+# print(Packet("A0016C880162017C3686B18A3D4780"))
 
 ans(Packet(a.data).value)
