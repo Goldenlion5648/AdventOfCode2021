@@ -5,42 +5,20 @@ from AoCLibrary import *
 a = AdventInput("input18.txt")
 inp = a.data
 
-
 def split(line: list, x, match):
-    # length = 0
-    print("got")
-    print(string(line))
-    print("match", match)
-    # while line[x + length].isnumeric():
-    #     length += 1
     line = line.copy()
     temp = int(match)
-    # for i in range(len(match)):
-    #     line.pop(x)
-    # temp = int(string(line[x:x+length]))
-    # for i in range(length):
-    #     line.pop(x)
-    # line = string(line)
-    # print("after pop\n", line)
-    # line = list(line)
     pair = f"[{(temp//2)},{ceil(temp/2)}]"
     line[x:x+len(match)] = list(pair)
-    # line = list(flatten(line))
-    # print("flattened", line)
     line = string(line)
-    print("after split")
-    print(line)
-    # input()
 
     return list(line)
 
 
 def explode(line, x, match):
     line = line.copy()
-    print(line[x])
-    print("match", match)
+
     lval, rval = nums(match)
-    # rval = 0
     lbound1 = 0
     lbound2 = 0
     for i in range(1, 1000):
@@ -52,8 +30,6 @@ def explode(line, x, match):
                 lbound1 = x-i
             else:
                 lbound1 -= 1
-            # line[x-i] = str(int(line[x-i]) + int(line[x]))
-            # break
         elif lbound2 != 0:
             break
     
@@ -70,21 +46,10 @@ def explode(line, x, match):
                 rbound2 += 1
         elif rbound2 != 0:
             break
-            # line[right+i] = str(int(line[right+i]) + int(line[right]))
-    
-    # # line[x] = '0'
-    # right = x + 1
-    # while right < len(line) and not line[right].isnumeric():
-    #     right += 1
-    # print("right", right)
-    
-    # print(lbound1, lbound2)
-    # print(rbound1, rbound2)
+
     lbound2 += 1
     rbound2 += 1
-    print("before")
-    # print(line)
-    print(string(line))
+
     if string(line[rbound1:rbound2]).isnumeric():
         line[rbound1:rbound2] = list(str(int(string(line[rbound1:rbound2])) + rval))
     for i in range(len(match)):
@@ -92,91 +57,62 @@ def explode(line, x, match):
     line.insert(x, 0)
     if string(line[lbound1:lbound2]).isnumeric():
         line[lbound1:lbound2] = str(int(string(line[lbound1:lbound2])) + lval)
-    # line[right] = '0'
-    print("ended with")
-    # print(line)
+
     line = string(line)
-    print(line)
-    # line = re.sub(r"\[0,0\],(\d)", r"0,\1", line)
-    # line = re.sub(r"(\d),\[0,0\]", r"\1,0", line)
-    # line = list(line)
-    # line.pop(x-1)
-    # for i in range(3):
-    #     line.pop(x)
-    # line = string(line)
-    # print('after')
-    # pritn(line)
+
     return list(line)
 
-# formula = ",".join(a.lines)
-# print(a.lines)
+def look_for_explode(line):
+    line = list(line)
+    depth = 0
+    x = 0
+    while 0 <= x < len(line):
+        if line[x] == "[":
+            depth += 1
+        elif line[x] == "]":
+            depth -= 1
+        s = string(line)
+        if line[x] == '[' and depth >= 5:
+            pot = re.match(r"^\[\d+,\d+\]", string(line[x:]))
+            if pot:
+                line = explode(line, x, pot.group())
+                # show_depth(line)
+                x = 0
+                depth = 0
+                continue
+        x += 1
+    return line
 
+def look_for_split(line):
+    line = list(line)
+    x = 0
+    while 0 <= x < len(line):
+        if line[x].isnumeric():
+            pot = re.match(r"^\d{2,}", string(line[x:]))
+            if pot:
+                line = split(line, x, pot.group())
+                # show_depth(line)
+                break
+        x += 1
+    return line
 
-# for z in a.lines:
-def run(z, start_depth=0):
+def run(z):
     line = list(z)
-    depth = start_depth
-    # for x in line:
-    changed = True
-    while changed:
-        x = 0
+    before = line.copy()
+    while True:
+        line = look_for_explode(line)
+        line = look_for_split(line)
+        if string(line) == string(before):
+            break
         before = line.copy()
-        potential_stop = -1
-        while 0 <= x < len(line):
-            if line[x] == "[":
-                depth += 1
-            elif line[x] == "]":
-                depth -= 1
-            s = string(line)
-            print("cur", line[x])
-            print("depth", depth)
-            # match =re.search(r"\d\d", s)
-            # print("match", match) 
-            if line[x] == '[' and depth >= 5:
-                pot = re.match(r"^\[\d+,\d+\]", string(line[x:]))
-                if pot:
-                    line = explode(line, x, pot.group())
-                    show_depth(line)
-                    # x = 0
-                    # depth -= 1
-                    # print(line)
-                    input()
-                    # continue
-            if line[x].isnumeric():
-                pot = re.match(r"^\d{2,}", string(line[x:]))
-                if pot:
-                    potential_stop = x
-                    line = split(line, x, pot.group())
-                    show_depth(line)
-                    x -= 1
-                    # depth += 1
-                    # print(line)
-                    input()
-                    # continue
-                
-            x += 1
-        changed = before != line
-
-        # print(line)
-    print(string(line))
     return string(line)
-
-
-formula = '[[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]],[7,[[[3,7],[4,3]],[[6,3],[8,8]]]]]'
-formula = '[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]'
-formula = "[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]"
-# run(inp)
-# assert run("[[[[[9,8],1],2],3],4]") == "[[[[0,9],2],3],4]"
-# assert run("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]") == "[[3,[2,[8,0]]],[9,[5,[7,0]]]]"
-# assert run("[[6,[5,[4,[3,2]]]],1]") == "[[6,[5,[7,0]]],3]"
-# assert run("[7,[6,[5,[4,[3,2]]]]]") == "[7,[6,[5,[7,0]]]]"
-# assert run("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]")
 
 def parse(s):
     s_lines = lines(s)
-    start = "[" + (",".join(s_lines[:2])) +"]"
-    print("start")
-    print(start)
+    if len(s_lines) == 1:
+        cur = run(s)
+        return cur
+    start = "[" + ",".join(s_lines[:2]) +"]"
     cur = run(start)
     for i in range(2, len(s_lines)):
         cur = "[" + cur + "," + s_lines[i] + "]"
@@ -194,43 +130,45 @@ def show_depth(line):
         print(depth, end='')
     print()
 
-RAW ='''[1,1]
-[2,2]
-[3,3]
-[4,4]'''
-# assert (parse(RAW)) == "[[[[1,1],[2,2]],[3,3]],[4,4]]"
-RAW = '''[1,1]
-[2,2]
-[3,3]
-[4,4]
-[5,5]'''
-# assert (parse(RAW)) == "[[[[3,0],[5,3]],[4,4]],[5,5]]"
-RAW = '''[1,1]
-[2,2]
-[3,3]
-[4,4]
-[5,5]
-[6,6]'''
-# assert (parse(RAW)) == "[[[[5,0],[7,4]],[5,5]],[6,6]]"
-# assert run("") == ""
-# assert run("") == ""
-RAW = '''[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]]
-[7,[[[3,7],[4,3]],[[6,3],[8,8]]]]
-[[2,[[0,8],[3,4]]],[[[6,7],1],[7,[1,6]]]]
-[[[[2,4],7],[6,[0,5]]],[[[6,8],[2,8]],[[2,1],[4,5]]]]
-[7,[5,[[3,8],[1,4]]]]
-[[2,[2,2]],[8,[8,1]]]
-[2,9]
-[1,[[[9,3],9],[[9,0],[0,7]]]]
-[[[5,[7,4]],7],1]
-[[[[4,2],2],6],[8,7]]'''
-RAW = '''[[[[7,7],[7,8]],[[9,5],[8,7]]],[[[6,8],[0,8]],[[9,9],[9,0]]]]
-[[2,[2,2]],[8,[8,1]]]'''
-RAW = '''[[[[7,7],[7,7]],[[8,7],[8,7]]],[[[7,0],[7,7]],9]]
-[[[[4,2],2],6],[8,7]]'''
-RAW = '''[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]]
-[7,[[[3,7],[4,3]],[[6,3],[8,8]]]]'''
-# RAW = '''[[[[4,3],4],4],[7,[[8,4],9]]]
-# [1,1]'''
+class Pair:
+    def __init__(self, left, right) -> None:
+        self.left = left
+        self.right = right
+    def get_magnitude(self):
+        first = self.left if type(self.left) == int else self.left.get_magnitude()
+        second = self.right if type(self.right) == int else self.right.get_magnitude()
+        return first * 3 + second * 2
+    
+def exec_format(s : str):
+    s = s.replace("[", "Pair(").replace("]",")")
+    return s
 
-print(parse(RAW))
+def get_mag(lines):
+    res = (parse(lines))
+    formatted = exec_format(res)
+    # print(formatted)
+    exec("ob=" + formatted, globals())
+    return (ob.get_magnitude())
+
+RAW = '''[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]
+[[[5,[2,8]],4],[5,[[9,9],0]]]
+[6,[[[6,2],[5,6]],[[7,6],[4,7]]]]
+[[[6,[0,7]],[0,9]],[4,[9,[9,0]]]]
+[[[7,[6,4]],[3,[1,3]]],[[[5,5],1],9]]
+[[6,[[7,3],[3,2]]],[[[3,8],[5,7]],4]]
+[[[[5,4],[7,7]],8],[[8,3],8]]
+[[9,3],[[9,9],[6,[4,9]]]]
+[[2,[[7,7],7]],[[5,8],[[9,3],[0,2]]]]
+[[[[5,2],5],[8,[3,7]]],[[5,[7,5]],[4,4]]]'''
+assert (get_mag(RAW)) == 4140
+ans(get_mag(inp))
+
+def part2(lines):
+    best = -1
+    for x, y in permutations(lines.split("\n"), 2):
+        best = max(best, get_mag(x+"\n"+y))
+    return best
+# assert part2(RAW) == 3993
+
+
+ans(part2(inp))
