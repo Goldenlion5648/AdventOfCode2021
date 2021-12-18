@@ -146,8 +146,7 @@ def exec_format(s : str):
 def get_mag(lines):
     res = (parse(lines))
     formatted = exec_format(res)
-    # print(formatted)
-    exec("ob=" + formatted, globals())
+    ob = eval(formatted)
     return (ob.get_magnitude())
 
 RAW = '''[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]
